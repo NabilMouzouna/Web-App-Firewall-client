@@ -1,15 +1,16 @@
 import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Trash2 } from 'lucide-react'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Input } from './ui/input'
 
 interface RulesSectionProps {
   rules: any[]
-  fetchRules: () => Promise<void>
+  fetchRules: () => Promise<any[]>
   addRule: (rule: { type: string; value: string; action: 'ALLOWED' | 'BLOCKED' }) => Promise<void>
   deleteRule: (id: string) => Promise<void>
 }
@@ -25,7 +26,11 @@ export default function RulesSection({ rules, fetchRules, addRule, deleteRule }:
     const loadRules = async () => {
       setIsLoading(true)
       try {
-        await fetchRules()
+        const fetchedRules = await fetchRules()
+        if (!fetchedRules || fetchedRules.length === 0) {
+          console.log('No rules found. Doing nothing.')
+          return
+        }
       } catch (err) {
         console.error('Error loading rules:', err)
         setError('Failed to load rules. Please try again.')
@@ -71,12 +76,15 @@ export default function RulesSection({ rules, fetchRules, addRule, deleteRule }:
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <Label htmlFor="type">Type</Label>
-          <Input
-            id="type"
-            value={type}
-            onChange={(e) => setType(e.target.value)}
-            required
-          />
+          <Select value={type} onValueChange={setType}>
+            <SelectTrigger>
+              <SelectValue placeholder="Select a type" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="ROUTE">path of URL</SelectItem>
+              <SelectItem value="REQUEST-BODY">data in the body of request</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
         <div>
           <Label htmlFor="value">Value</Label>
@@ -84,6 +92,7 @@ export default function RulesSection({ rules, fetchRules, addRule, deleteRule }:
             id="value"
             value={value}
             onChange={(e) => setValue(e.target.value)}
+            placeholder='Enter something like /admin or <script> ...'
             required
           />
         </div>
@@ -151,4 +160,3 @@ export default function RulesSection({ rules, fetchRules, addRule, deleteRule }:
     </div>
   )
 }
-

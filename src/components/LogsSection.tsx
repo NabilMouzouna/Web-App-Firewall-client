@@ -14,7 +14,7 @@ export default function LogsSection({ logs, refreshLogs }: LogsSectionProps) {
         <TableHeader>
           <TableRow>
             <TableHead>Timestamp</TableHead>
-            <TableHead>Malicious</TableHead>
+            <TableHead>Blocked</TableHead>
             <TableHead>Method</TableHead>
             <TableHead>Url</TableHead>
           </TableRow>

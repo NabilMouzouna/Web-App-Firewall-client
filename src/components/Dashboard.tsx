@@ -25,7 +25,7 @@ export default function Dashboard() {
     }
   }
 
-  const fetchRules = useCallback(async () => {
+  const fetchRules = useCallback(async (): Promise<any[]> => {
     try {
       console.log('Fetching rules...')
       const response = await fetch('http://localhost:8080/api/admin/rules')
@@ -39,10 +39,12 @@ export default function Dashboard() {
       console.log('Parsed data:', data)
       setRules(data)
       setError(null)
+      return data // Ensure it returns the data
     } catch (error) {
       console.error('Error fetching rules:', error)
       setRules([])
       setError('Failed to fetch rules. Please check the console for more details.')
+      return [] // Return an empty array in case of an error
     }
   }, [])
 
@@ -58,7 +60,7 @@ export default function Dashboard() {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
-      await fetchRules()
+      await fetchRules() // Call fetchRules after adding a new rule
     } catch (error) {
       console.error('Error adding rule:', error)
       setError('Failed to add rule. Please try again.')
@@ -73,7 +75,7 @@ export default function Dashboard() {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
-      await fetchRules()
+      await fetchRules() // Call fetchRules after deleting a rule
     } catch (error) {
       console.error('Error deleting rule:', error)
       setError('Failed to delete rule. Please try again.')
@@ -108,4 +110,3 @@ export default function Dashboard() {
     </div>
   )
 }
-
