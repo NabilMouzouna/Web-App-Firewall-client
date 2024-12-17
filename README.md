@@ -21,5 +21,5 @@ A web-based dashboard for managing Web Application Firewall (WAF) rules and moni
 ### Installation  
 1. Clone the repository:  
    ```bash  
-   git clone [<client-repo-url>  ](https://github.com/NabilMouzouna/Web-App-Firewall-client.git)
-   cd client  
+   git clone https://github.com/NabilMouzouna/Web-App-Firewall-client.git
+   cd Web-App-Firewall-client  
